@@ -2,11 +2,11 @@
 # -*- coding:utf-8 -*-
 import os
 import checksumdir
-from flask import Flask, request, make_response, redirect, url_for, render_template
+from flask import Flask, render_template
 app = Flask(__name__)
 
 puppetWorkingDirectory='puppet'
-environnements=['preprod', 'prod']
+environnements=['maquette','preprod', 'prod']
 
 @app.route('/')
 def accueil():
@@ -30,10 +30,12 @@ def accueil():
                     curEnvMd5Sum=checksumdir.dirhash(curEnvDir)
                     if os.path.exists(prevEnvDir): 
                         prevEnvMd5sum=checksumdir.dirhash(prevEnvDir)
-                    if curEnvMd5Sum == prevEnvMd5sum:
-                        mod[env]="ok"
+                        if curEnvMd5Sum == prevEnvMd5sum:
+                            mod[env]="ok"
+                        else:
+                            mod[env]="nok"
                     else:
-                        mod[env]="nok"
+                        mod[env]="ok"
                 elif id == 0:
                     mod[env]="ok"
             else:
